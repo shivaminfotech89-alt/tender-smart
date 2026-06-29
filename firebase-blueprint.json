@@ -1,0 +1,58 @@
+{
+  "project_id": "",
+  "features": {
+    "firestore": true,
+    "authentication": {
+      "providers": {
+        "google": true
+      }
+    }
+  },
+  "firestore": {
+    "rules": {
+      "strategy": "user-isolated",
+      "collections": [
+        {
+          "name": "users",
+          "doc_id": "{userId}",
+          "rules": {
+            "read": "request.auth != null && request.auth.uid == userId",
+            "write": "request.auth != null && request.auth.uid == userId"
+          }
+        },
+        {
+          "name": "tenders",
+          "doc_id": "{tenderId}",
+          "rules": {
+            "read": "request.auth != null && resource.data.userId == request.auth.uid",
+            "write": "request.auth != null && request.resource.data.userId == request.auth.uid"
+          }
+        }
+      ]
+    },
+    "schema": {
+      "users": {
+        "user1": {
+          "name": "Acme Corp",
+          "turnover": "5",
+          "experienceYears": 10,
+          "capacity": "80",
+          "locations": "Delhi",
+          "certifications": ["ISO 9001"],
+          "pastProjects": "Project X",
+          "updatedAt": "2024-01-01T00:00:00Z"
+        }
+      },
+      "tenders": {
+        "tender1": {
+          "userId": "user1",
+          "title": "Generator Supply",
+          "authority": "MoD",
+          "status": "Analyzing",
+          "createdAt": "2024-01-01T00:00:00Z",
+          "updatedAt": "2024-01-01T00:00:00Z"
+        }
+      }
+    }
+  }
+}
